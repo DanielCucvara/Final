@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Final</string>
+    <string name="places_api_key">AIzaSyC5T1ROj6RfVbFaJzaSoe_rcf5X2eXQpsM</string>
+    <string name="start">Start</string>
 </resources>

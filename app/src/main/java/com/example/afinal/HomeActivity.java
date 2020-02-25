@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
     Button btnLogOut;
+    ImageView imgFindRide;
     ImageView imgCreateRide;
     FirebaseAuth.AuthStateListener mAuthStateListener;
 
@@ -24,7 +25,16 @@ public class HomeActivity extends AppCompatActivity {
 
         Toast.makeText(HomeActivity.this,"Database connection succes",Toast.LENGTH_LONG).show();
         imgCreateRide=findViewById(R.id.imgCreateRide);
+        imgFindRide = findViewById(R.id.imgFindRide);
         btnLogOut=findViewById(R.id.btnLogOut);
+
+        imgFindRide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this,FindRideActivity.class);
+                startActivity(i);
+            }
+        });
 
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override

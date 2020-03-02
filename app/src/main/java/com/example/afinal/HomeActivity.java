@@ -16,7 +16,6 @@ public class HomeActivity extends AppCompatActivity {
     Button btnLogOut;
     ImageView imgFindRide;
     ImageView imgCreateRide;
-    FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +23,9 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         Toast.makeText(HomeActivity.this,"Database connection succes",Toast.LENGTH_LONG).show();
-        imgCreateRide=findViewById(R.id.imgCreateRide);
-        imgFindRide = findViewById(R.id.imgFindRide);
-        btnLogOut=findViewById(R.id.btnLogOut);
+        imgCreateRide = findViewById(R.id.add_ride_image);
+        imgFindRide = findViewById(R.id.find_ride_image);
+        btnLogOut = findViewById(R.id.btnLogOut);
 
         imgFindRide.setOnClickListener(new View.OnClickListener() {
             @Override

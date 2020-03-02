@@ -50,6 +50,9 @@ public class FindRideActivity extends AppCompatActivity {
     private ArrayList<String> mStarts;
     private ArrayList<String> mDestinations;
     private ArrayList<String> mImages;
+    private ArrayList<String> mDates;
+    private ArrayList<String> mTimes;
+    private ArrayList<Integer> mSeats;
     private TextView DateTextView;
     private TextView TimeTextView;
     private EditText PassengersEditText;
@@ -72,11 +75,13 @@ public class FindRideActivity extends AppCompatActivity {
 
 
         DatRef = FirebaseDatabase.getInstance().getReference().child("Ride");
-        //listViewRides = findViewById(R.id.listViewRides);
         rideList = new ArrayList<>();
         mStarts = new ArrayList<>();
         mDestinations = new ArrayList<>();
         mImages = new ArrayList<>();
+        mDates = new ArrayList<>();
+        mTimes = new ArrayList<>();
+        mSeats = new ArrayList<>();
 
         setUpPlaceAutoCompleteDestination();
         setUpPlaceAutoCompleteStart();
@@ -100,10 +105,13 @@ public class FindRideActivity extends AppCompatActivity {
                     Ride ride = ridesSnapshot.getValue(Ride.class);
                     mStarts.add(ride.getStart());
                     mDestinations.add(ride.getDestination());
+                    mDates.add(ride.getDate());
+                    mTimes.add(ride.getTime());
+                    mSeats.add(ride.getPassengers());
                     mImages.add("https://i.gifer.com/fetch/w300-preview/4d/4da3190067177e522e7771c66cf3c25d.gif");
 
                 }
-                initRecyclerView(mStarts,mDestinations,mImages);
+                initRecyclerView(mStarts,mDestinations,mImages,mDates,mTimes,mSeats);
             }
 
             @Override
@@ -138,7 +146,7 @@ public class FindRideActivity extends AppCompatActivity {
 
                         }
                         if (RidesFound == true) {
-                            initRecyclerView(mStarts, mDestinations, mImages);
+                            initRecyclerView(mStarts, mDestinations, mImages,mDates,mTimes,mSeats);
                         } else
                             Toast.makeText(FindRideActivity.this, "Nenasli sa ziadne jazdy", Toast.LENGTH_SHORT).show();
                     }
@@ -152,9 +160,10 @@ public class FindRideActivity extends AppCompatActivity {
             }
         });
     }
-    private void initRecyclerView(ArrayList<String> mStarts,ArrayList<String> mDestinations,ArrayList<String> mImages){
+    private void initRecyclerView(ArrayList<String> mStarts,ArrayList<String> mDestinations,ArrayList<String> mImages,
+                                  ArrayList<String>mDates,ArrayList<String>mTimes,ArrayList<Integer>mSeats){
         RecyclerView recyclerView = findViewById(R.id.recyclerView_findRide);
-        RecyclerViewAdapter adapter= new RecyclerViewAdapter(mStarts,mDestinations,mImages,this);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(mStarts,mDestinations,mImages,mDates,mTimes,mSeats,this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -253,7 +262,7 @@ public class FindRideActivity extends AppCompatActivity {
         mRideDatePickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = dayOfMonth+"/"+(month+1)+"/"+year;
+                String date = dayOfMonth+"."+(month+1)+"."+year;
                 DateTextView.setText(date);
                 Date = date;
             }

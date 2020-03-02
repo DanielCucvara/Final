@@ -70,38 +70,6 @@ public class CreateRideActivity extends AppCompatActivity {
         setUpPlaceAutoCompleteDestination();
     }
 
-
-
-
-
-/*
-        EtStart=findViewById(R.id.editTextStart);
-        EtDate=findViewById(R.id.editTextDate);
-        EtDestination=findViewById(R.id.editTextDestination);
-        EtPassengers=findViewById(R.id.editTextPassengers);
-        btnCreateRide=findViewById(R.id.btnCreateRide);
-        Ride = new Ride();
-        DatRef = FirebaseDatabase.getInstance().getReference().child("Ride");
-        btnCreateRide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int passengers = Integer.parseInt(EtPassengers.getText().toString().trim());
-                String start = EtStart.getText().toString().trim();
-                String dest = EtDestination.getText().toString().trim();
-                String date = EtDate.getText().toString().trim();
-
-                Ride.setDate(date);
-                Ride.setDestination(dest);
-                Ride.setPassengers(passengers);
-                Ride.setStart(start);
-                DatRef.push().setValue(Ride);
-                Toast.makeText(CreateRideActivity.this,"U made it dog",Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-
-*/
 public void initPlaces(){
     Places.initialize(this,getString(R.string.places_api_key));
     placesClient = Places.createClient(this);
@@ -208,10 +176,12 @@ public void initPlaces(){
             public void onClick(View v) {
                 Seats = Integer.parseInt(NumberOfSeats.getText().toString().trim());
                 Ride ride = new Ride();
-                ride.setDate(Date);
-                ride.setDestination(Destination);
-                ride.setPassengers(Seats);
                 ride.setStart(Start);
+                ride.setDestination(Destination);
+                ride.setDate(Date);
+                ride.setTime(Time);
+                ride.setPassengers(Seats);
+
                 DatRef.push().setValue(ride);
                 Toast.makeText(CreateRideActivity.this,"U made it dog",Toast.LENGTH_LONG).show();
             }

@@ -6,7 +6,12 @@ public class Ride {
     private String Start;
     private String Destination;
     private String Date;
+    private String Time;
     private int Passengers;
+
+    public String getTime() { return Time; }
+
+    public void setTime(String time) { Time = time; }
 
     public String getStart() {
         return Start;

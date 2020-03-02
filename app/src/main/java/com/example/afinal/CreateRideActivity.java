@@ -56,90 +56,19 @@ public class CreateRideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_ride);
 
-        initPlaces();
-
-        setUpPlaceAutoCompleteStart();
-        setUpPlaceAutoCompleteDestination();
-
         DatRef = FirebaseDatabase.getInstance().getReference().child("Ride");
-        TimeTextView = (TextView)findViewById(R.id.TimeTextView);
-        DateTextView = (TextView)findViewById(R.id.textViewDate);
+        TimeTextView = findViewById(R.id.TimeTextView);
+        DateTextView = findViewById(R.id.textViewDate);
         CreateRideBtn = findViewById(R.id.CreateRideBtn);
         NumberOfSeats = findViewById(R.id.PassengersEditText);
 
-        TimeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int hour = cal.get(Calendar.HOUR_OF_DAY);
-                int minute = cal.get(Calendar.MINUTE);
+        initPlaces();
+        initTimeDateListeners();
+        initCreateRideListener();
 
-                TimePickerDialog timeDialog = new TimePickerDialog(
-                        CreateRideActivity.this,
-                        android.R.style.Theme_Holo_Dialog_MinWidth,
-                        mRideTimePickerListener,
-                        hour,minute,true);
-                timeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                timeDialog.show();
-            }
-        });
-
-        mRideTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String time = hourOfDay+":"+minute;
-                TimeTextView.setText(time);
-                Time = time;
-            }
-        };
-
-        DateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month =  cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dateDialog = new DatePickerDialog(
-                        CreateRideActivity.this,
-                        android.R.style.Theme_Holo_Dialog_MinWidth,
-                        mRideDatePickerListener,
-                        year,month,day);
-                dateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dateDialog.show();
-            }
-        });
-
-        mRideDatePickerListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = dayOfMonth+"/"+(month+1)+"/"+year;
-                DateTextView.setText(date);
-                Date = date;
-            }
-        };
-
-        CreateRideBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Seats = Integer.parseInt(NumberOfSeats.getText().toString().trim());
-                Ride ride = new Ride();
-                ride.setDate(Date);
-                ride.setDestination(Destination);
-                ride.setPassengers(Seats);
-                ride.setStart(Start);
-                DatRef.push().setValue(ride);
-                Toast.makeText(CreateRideActivity.this,"U made it dog",Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-
-
-
-
-        }
+        setUpPlaceAutoCompleteStart();
+        setUpPlaceAutoCompleteDestination();
+    }
 
 
 
@@ -213,6 +142,78 @@ public void initPlaces(){
             public void onError(@NonNull Status status) {
                 Toast.makeText(CreateRideActivity.this,""+status.getStatusMessage(),Toast.LENGTH_SHORT).show();
 
+            }
+        });
+    }
+
+    private void initTimeDateListeners(){
+        TimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int hour = cal.get(Calendar.HOUR_OF_DAY);
+                int minute = cal.get(Calendar.MINUTE);
+
+                TimePickerDialog timeDialog = new TimePickerDialog(
+                        CreateRideActivity.this,
+                        android.R.style.Theme_Holo_Dialog_MinWidth,
+                        mRideTimePickerListener,
+                        hour,minute,true);
+                timeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                timeDialog.show();
+            }
+        });
+
+        mRideTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String time = hourOfDay+":"+minute;
+                TimeTextView.setText(time);
+                Time = time;
+            }
+        };
+
+        DateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month =  cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dateDialog = new DatePickerDialog(
+                        CreateRideActivity.this,
+                        android.R.style.Theme_Holo_Dialog_MinWidth,
+                        mRideDatePickerListener,
+                        year,month,day);
+                dateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dateDialog.show();
+            }
+        });
+
+        mRideDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String date = dayOfMonth+"/"+(month+1)+"/"+year;
+                DateTextView.setText(date);
+                Date = date;
+            }
+        };
+
+    }
+
+    private void initCreateRideListener(){
+        CreateRideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Seats = Integer.parseInt(NumberOfSeats.getText().toString().trim());
+                Ride ride = new Ride();
+                ride.setDate(Date);
+                ride.setDestination(Destination);
+                ride.setPassengers(Seats);
+                ride.setStart(Start);
+                DatRef.push().setValue(ride);
+                Toast.makeText(CreateRideActivity.this,"U made it dog",Toast.LENGTH_LONG).show();
             }
         });
     }

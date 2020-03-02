@@ -5,9 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -24,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class FindRideActivity extends AppCompatActivity {
@@ -31,11 +42,21 @@ public class FindRideActivity extends AppCompatActivity {
     private ListView listViewRides;
     private String Start;
     private String Destination;
+    private String Time;
+    private String Date;
+    private int FreeSeats;
     private DatabaseReference DatRef;
     private List<Ride> rideList;
     private ArrayList<String> mStarts;
     private ArrayList<String> mDestinations;
     private ArrayList<String> mImages;
+    private TextView DateTextView;
+    private TextView TimeTextView;
+    private EditText PassengersEditText;
+    private Button FindRideButton;
+    private DatePickerDialog.OnDateSetListener mRideDatePickerListener;
+    private TimePickerDialog.OnTimeSetListener mRideTimePickerListener;
+    private Boolean RidesFound;
     PlacesClient placesClient;
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
     AutocompleteSupportFragment places_fragment;
@@ -44,9 +65,11 @@ public class FindRideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_ride);
-        initPlaces();
-        setUpPlaceAutoCompleteDestination();
-        setUpPlaceAutoCompleteStart();
+        DateTextView = findViewById(R.id.find_ride_date);
+        TimeTextView = findViewById(R.id.find_ride_time);
+        PassengersEditText = findViewById(R.id.find_ride_passengers);
+        FindRideButton = findViewById(R.id.find_ride_btn);
+
 
         DatRef = FirebaseDatabase.getInstance().getReference().child("Ride");
         //listViewRides = findViewById(R.id.listViewRides);
@@ -55,32 +78,16 @@ public class FindRideActivity extends AppCompatActivity {
         mDestinations = new ArrayList<>();
         mImages = new ArrayList<>();
 
+        setUpPlaceAutoCompleteDestination();
+        setUpPlaceAutoCompleteStart();
+
+        initPlaces();
         initmRides();
+        initFindRideListener();
+        initTimeDatePicker();
 
     }
-    /*@Override
-    protected void onStart() {
-        super.onStart();
 
-        DatRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                rideList.clear();
-                for (DataSnapshot ridesSnapshot : dataSnapshot.getChildren()){
-                    Ride ride = ridesSnapshot.getValue(Ride.class);
-                    rideList.add(ride);
-                }
-                RideList adapter = new RideList(FindRideActivity.this,rideList);
-                listViewRides.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 
     private void initmRides(){
         DatRef.addValueEventListener(new ValueEventListener() {
@@ -105,6 +112,45 @@ public class FindRideActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initFindRideListener(){
+        FindRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        RidesFound = false;
+                        mDestinations.clear();
+                        mStarts.clear();
+                        mImages.clear();
+                        //FreeSeats = Integer.parseInt(PassengersEditText.getText().toString());
+                        for (DataSnapshot ridesSnapshot : dataSnapshot.getChildren()) {
+                            Ride ride = ridesSnapshot.getValue(Ride.class);
+                            if (ride.getStart().equals(Start) && ride.getDestination().equals(Destination)) {
+                                mStarts.add(ride.getStart());
+                                mDestinations.add(ride.getDestination());
+                                mImages.add("https://i.gifer.com/fetch/w300-preview/4d/4da3190067177e522e7771c66cf3c25d.gif");
+                                RidesFound = true;
+
+                            }
+
+                        }
+                        if (RidesFound == true) {
+                            initRecyclerView(mStarts, mDestinations, mImages);
+                        } else
+                            Toast.makeText(FindRideActivity.this, "Nenasli sa ziadne jazdy", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
     }
     private void initRecyclerView(ArrayList<String> mStarts,ArrayList<String> mDestinations,ArrayList<String> mImages){
         RecyclerView recyclerView = findViewById(R.id.recyclerView_findRide);
@@ -156,4 +202,65 @@ public class FindRideActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+    private void initTimeDatePicker(){
+        TimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int hour = cal.get(Calendar.HOUR_OF_DAY);
+                int minute = cal.get(Calendar.MINUTE);
+
+                TimePickerDialog timeDialog = new TimePickerDialog(
+                        FindRideActivity.this,
+                        android.R.style.Theme_Holo_Dialog_MinWidth,
+                        mRideTimePickerListener,
+                        hour,minute,true);
+                timeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                timeDialog.show();
+            }
+        });
+
+        mRideTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String time = hourOfDay+":"+minute;
+                TimeTextView.setText(time);
+                Time = time;
+            }
+        };
+
+        DateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month =  cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dateDialog = new DatePickerDialog(
+                        FindRideActivity.this,
+                        android.R.style.Theme_Holo_Dialog_MinWidth,
+                        mRideDatePickerListener,
+                        year,month,day);
+                dateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dateDialog.show();
+            }
+        });
+
+        mRideDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String date = dayOfMonth+"/"+(month+1)+"/"+year;
+                DateTextView.setText(date);
+                Date = date;
+            }
+        };
+
+    }
+
+
+
 }

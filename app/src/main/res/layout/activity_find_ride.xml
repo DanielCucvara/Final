@@ -24,7 +24,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_findRide"
         android:layout_width="match_parent"
-        android:layout_height="516dp"
+        android:layout_height="434dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -32,7 +32,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="221dp"
+        android:layout_marginTop="297dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp" />
 
@@ -45,20 +45,24 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="131dp"
-        android:layout_marginLeft="131dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="130dp"
-        android:layout_marginRight="130dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="238dp"
+        android:layout_marginRight="238dp"
         android:text="Start"
-        android:textSize="20dp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="20dp" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="63dp"
+        android:layout_width="179dp"
+        android:layout_height="54dp"
         android:layout_below="@+id/textView3"
-        android:layout_marginTop="13dp">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,20 +88,24 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="142dp"
-        android:layout_marginLeft="142dp"
-        android:layout_marginTop="115dp"
-        android:layout_marginEnd="144dp"
-        android:layout_marginRight="144dp"
+        android:layout_marginStart="234dp"
+        android:layout_marginLeft="234dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginRight="52dp"
         android:text="Destination"
         android:textAlignment="center"
         android:textSize="20dp" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="163dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="147dp">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,5 +119,54 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/find_ride_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="161dp"
+        android:layout_marginLeft="161dp"
+        android:layout_marginTop="239dp"
+        android:text="Find a ride" />
+
+    <TextView
+        android:id="@+id/find_ride_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="71dp"
+        android:layout_marginLeft="71dp"
+        android:layout_marginTop="135dp"
+        android:text="Pick a date" />
+
+    <TextView
+        android:id="@+id/find_ride_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="267dp"
+        android:layout_marginLeft="267dp"
+        android:layout_marginTop="134dp"
+        android:text="Pick time" />
+
+    <EditText
+        android:id="@+id/find_ride_passengers"
+        android:inputType="number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="109dp"
+        android:layout_marginLeft="109dp"
+        android:layout_marginTop="173dp"
+        android:hint="Number of passengers" />
 
 </RelativeLayout>
